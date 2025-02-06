@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>बायोडाटा</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            color: #333;
+        }
+
+        h1, h2 {
+            color: #444;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #2c3e50;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #34495e;
+            border-bottom: 2px solid #3498db;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .download-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #3498db;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .section ul li {
+            margin: 10px 0;
+            padding: 10px;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: background 0.3s ease;
+        }
+
+        .section ul li:hover {
+            background: #f1f1f1;
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .gallery img {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.1);
+        }
+
+        /* Full-screen image viewer */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .modal img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 10px;
+        }
+
+        .close, .prev, .next, .download {
+            position: absolute;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        .close {
+            top: 20px;
+            right: 30px;
+        }
+
+        .prev {
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .next {
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .download {
+            bottom: 20px;
+            right: 30px;
+            font-size: 24px;
+        }
+
+        /* Responsive Design for Mobile */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+
+            .section {
+                padding: 15px;
+            }
+
+            .section ul li {
+                padding: 8px;
+                font-size: 0.9rem;
+            }
+
+            .gallery img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .prev, .next {
+                font-size: 24px;
+            }
+
+            .close, .download {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            .container {
+                padding: 10px;
+                margin: 5px;
+            }
+
+            .section {
+                padding: 10px;
+            }
+
+            .section ul li {
+                padding: 6px;
+                font-size: 0.85rem;
+            }
+
+            .gallery img {
+                width: 60px;
+                height: 60px;
+            }
+
+            .prev, .next {
+                font-size: 20px;
+            }
+
+            .close, .download {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="biodataContainer">
+        <!-- Download Icon -->
+        <div class="download-icon" onclick="downloadBiodata()">⬇️</div>
+
+        <h1>बायोडाटा</h1>
+
+        <!-- Personal Information -->
+        <div class="section">
+            <h2>व्यक्तिगत विवरण</h2>
+            <ul>
+                <li><strong>नाम:</strong> धनंजय पाटीदार</li>
+                <li><strong>जन्मतिथि:</strong> 22 अक्टूबर 1997</li>
+                <li><strong>ऊंचाई:</strong> 5 फीट 7 इंच</li>
+                <li><strong>शिक्षा:</strong> एमबीए (फाइनेंस, मार्केटिंग)</li>
+                <li><strong>व्यापार:</strong> विजन अकाउंटिंग क्लासेस इंदौर (कोचिंग सेंटर)</li>
+                <li><strong>मासिक आय:</strong> 10000/- से 20000/-</li>
+                <li><strong>नौकरी:</strong> अकाउंटेंट (MAJOR FOOTWEARS PVT LTD INDORE)</li>
+                <li><strong>मासिक आय:</strong> 18000/-</li>
+            </ul>
+        </div>
+
+        <!-- Family Details -->
+        <div class="section">
+            <h2>पारिवारिक विवरण</h2>
+            <ul>
+                <li><strong>पिता का नाम:</strong> राजेश जी पाटीदार</li>
+                <li><strong>पिता का व्यवसाय:</strong> किसान/आटा चक्की</li>
+                <li><strong>माता का नाम:</strong> उषा पाटीदार</li>
+                <li><strong>बहन:</strong> प्रिती पाटीदार (छोटी कसरावद)</li>
+                <li><strong>कुली:</strong> धामुंदिया परिवार</li>
+                <li><strong>भूमि:</strong> 7 बीघा</li>
+                <li><strong>मामाजी:</strong> 1) शिवराम पाटीदार, 2) देवेन्द पाटीदार</li>
+                <li><strong>कुली:</strong> बराड़िया परिवार</li>
+                <li><strong>पता:</strong> पाडलिया</li>
+                <li><strong>सम्पर्क:</strong> 9977755067</li>
+                <li><strong>पता:</strong> ग्राम ईटावदी, तहसील महेश्वर, जिला खरगोन, म.प्र.</li>
+            </ul>
+        </div>
+
+        <!-- Photos -->
+        <div class="section">
+            <h2>फोटो</h2>
+            <div class="gallery">
+                <img src="images/photo1.jpeg" alt="Photo 1" onclick="openModal(0)">
+                <img src="images/photo2.jpeg" alt="Photo 2" onclick="openModal(1)">
+                <img src="images/photo3.jpeg" alt="Photo 3" onclick="openModal(2)">
+                <img src="images/photo4.jpeg" alt="Photo 3" onclick="openModal(3)">
+                <img src="images/photo5.jpeg" alt="Photo 3" onclick="openModal(4)">
+            </div>
+        </div>
+    </div>
+
+    <!-- Full-screen Image Viewer -->
+    <div class="modal" id="imageModal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <span class="prev" onclick="prevImage()">&#10094;</span>
+        <span class="next" onclick="nextImage()">&#10095;</span>
+        <span class="download" onclick="downloadCurrentImage()">⬇️</span>
+        <div class="modal-content">
+            <img id="modalImage" src="" alt="Full-size Image">
+        </div>
+    </div>
+
+    <!-- Include html2canvas library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        // Function to download biodata as an image
+        function downloadBiodata() {
+            const container = document.getElementById('biodataContainer');
+            html2canvas(container).then(canvas => {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = 'biodata.png';
+                link.click();
+            });
+        }
+
+        // Image gallery functionality
+        let currentIndex = 0;
+        const images = ["images/photo1.jpeg", "images/photo2.jpeg", "images/photo3.jpeg", "images/photo4.jpeg", "images/photo5.jpeg"];
+
+        function openModal(index) {
+            currentIndex = index;
+            document.getElementById('modalImage').src = images[currentIndex];
+            document.getElementById('imageModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            document.getElementById('modalImage').src = images[currentIndex];
+        }
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % images.length;
+            document.getElementById('modalImage').src = images[currentIndex];
+        }
+
+        function downloadCurrentImage() {
+            const link = document.createElement('a');
+            link.href = images[currentIndex];
+            link.download = `photo${currentIndex + 1}.jpeg`;
+            link.click();
+        }
+    </script>
+</body>
+</html>
